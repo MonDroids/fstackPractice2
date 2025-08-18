@@ -1,12 +1,12 @@
 const express = require('express'); //Import the express framework
 cors = require('cors');
 const app = express(); //Create an express app
-const port = 3001; //port run the server on
+const port = 3002; //port run the server on
 
 app.use(express.json()); //Middleware to parse Json bodies
 app.use(cors()); //CORS middleware
 
-let user = [
+let users = [
     { id: 1, name: 'John Doe', email: 'john@example.com' },
     { id: 2, name: 'John Smith', email: 'smith@example.com' },
 ];
