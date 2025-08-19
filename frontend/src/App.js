@@ -33,6 +33,8 @@ function App(){
       .catch((error) => console.error("Error adding user:", error));
   };
   
+  // Put - хэрэглэгчийн мэдээллийг шинэчлэх
+  
 
   return (
     <div>
@@ -56,7 +58,7 @@ function App(){
         <button type="submit">Нэмэх</button>
       </form>
 
-      
+
       <h1>Хэрэглэгчидийн мэдээллийг харах</h1>
       <ul>
         {users.map((user) => (
