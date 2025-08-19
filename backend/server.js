@@ -44,6 +44,20 @@ app.put('/users/:id', (req, res) => {
     }
 });
 
+// Delete - Хэрэглэгч устгах
+app.delete('/users/:id', (req, res) => {
+    const { id } = req.params;
+    if (users.some((user) => user.id === parseInt(id))) {
+        users = users.filter((user) => user.id !== parseInt(id));
+        return res.status(204).json({ message: 'User deleted successfully' });
+    } else {
+        users = users.filter((user) => user.id !== parseInt(id));
+        res.status(404).json({ message: 'User not found' });
+    }
+});
+
+
+
 app.listen(port, () => {
     console.log(`Cэрвэр ажиллаж байна http://localhost:${port}`);
 });
