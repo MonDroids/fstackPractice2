@@ -34,7 +34,16 @@ function App(){
   };
   
   // Put - хэрэглэгчийн мэдээллийг шинэчлэх
-  
+  const handleDelete = (id) => {
+    fetch(`http://localhost:3002/users/${id}`, {
+      method: 'DELETE',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setUsers(users.filter((user) => user.id !== id));
+      })
+      .catch((error) => console.error("Error deleting user:", error));
+  };
 
   return (
     <div>
@@ -67,8 +76,17 @@ function App(){
           </li>
         ))}
       </ul>
-    </div>
-  );
-}
+        <h1>Хэрэглэгч устгах</h1>
+        <ul>
+          {users.map((user) => (
+            <li key={user.id}>
+              {user.name} ({user.email})
+              <button onClick={() => handleDelete(user.id)}>Устгах</button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
 
 export default App;
