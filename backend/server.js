@@ -17,7 +17,7 @@ app.get('/users', (req, res) => {
 
 app.post('/users', (req, res) => {
     const newUser = req.body;
-    newUser.id = users.length + 1;
+    newUser.id = Date.now();
     users.push(newUser);
     res.status(201).json(newUser);
 });
@@ -47,12 +47,13 @@ app.put('/users/:id', (req, res) => {
 // Delete - Хэрэглэгч устгах
 app.delete('/users/:id', (req, res) => {
     const { id } = req.params;
-    if (users.some((user) => user.id === parseInt(id))) {
-        users = users.filter((user) => user.id !== parseInt(id));
-        return res.status(204).json({ message: 'User deleted successfully' });
+    const parsedId = parseInt(id);
+
+    if (users.some((user) => user.id === parsedId)) {
+        users = users.filter((user) => user.id !== parsedId);
+        return res.status(200).json({ message: 'User deleted successfully' });
     } else {
-        users = users.filter((user) => user.id !== parseInt(id));
-        res.status(404).json({ message: 'User not found' });
+        return res.status(404).json({ message: 'User not found' });
     }
 });
 
