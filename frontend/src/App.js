@@ -35,15 +35,24 @@ function App(){
   
   // Put - хэрэглэгчийн мэдээллийг шинэчлэх
   const handleDelete = (id) => {
-    fetch(`http://localhost:3002/users/${id}`, {
-      method: 'DELETE',
+  fetch(`http://localhost:3002/users/${id}`, {
+    method: 'DELETE',
+  })
+    .then(async (response) => {
+      if (!response.ok) {
+        // JSON оролдохоос өмнө шалгах
+        const text = await response.text();
+        throw new Error(`Server error ${response.status}: ${text}`);
+      }
+      return response.json();
     })
-      .then((response) => response.json())
-      .then((data) => {
-        setUsers(users.filter((user) => user.id !== id));
-      })
-      .catch((error) => console.error("Error deleting user:", error));
-  };
+    .then((data) => {
+      console.log("Delete response:", data);
+      setUsers(users.filter((user) => user.id !== id));
+    })
+    .catch((error) => console.error("Error deleting user:", error));
+};
+
 
   return (
     <div>
@@ -69,22 +78,16 @@ function App(){
 
 
       <h1>Хэрэглэгчидийн мэдээллийг харах</h1>
-      <ul>
-        {users.map((user) => (
-          <li key={user.id}>
-            {user.name} ({user.email})
-          </li>
-        ))}
-      </ul>
-        <h1>Хэрэглэгч устгах</h1>
-        <ul>
-          {users.map((user) => (
-            <li key={user.id}>
-              {user.name} ({user.email})
-              <button onClick={() => handleDelete(user.id)}>Устгах</button>
-            </li>
-          ))}
-        </ul>
+<ul>
+  {users.map((user) => (
+    <li key={user.id}>
+      {user.name} ({user.email})
+      <button onClick={() => handleDelete(user.id)} style={{ marginLeft: "10px" }}>
+        Устгах
+      </button>
+    </li>
+  ))}
+</ul>
       </div>
     );
   }
