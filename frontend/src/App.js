@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function App(){
+function App() {
   const [users, setUsers] = useState([]);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -14,13 +14,13 @@ function App(){
   }, []);
 
   // Хэрэглэгч нэмэх
-  const handleSubmit = (e) =>{
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const newUser = {name, email};
-    fetch('http://localhost:3002/users', {
-      method: 'POST',
+    const newUser = { name, email };
+    fetch("http://localhost:3002/users", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(newUser),
     })
@@ -32,32 +32,29 @@ function App(){
       })
       .catch((error) => console.error("Error adding user:", error));
   };
-  
-  // Put - хэрэглэгчийн мэдээллийг шинэчлэх
-  const handleDelete = (id) => {
-  fetch(`http://localhost:3002/users/${id}`, {
-    method: 'DELETE',
-  })
-    .then(async (response) => {
-      if (!response.ok) {
-        // JSON оролдохоос өмнө шалгах
-        const text = await response.text();
-        throw new Error(`Server error ${response.status}: ${text}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log("Delete response:", data);
-      setUsers(users.filter((user) => user.id !== id));
-    })
-    .catch((error) => console.error("Error deleting user:", error));
-};
 
+  // Хэрэглэгч устгах
+  const handleDelete = (id) => {
+    fetch(`http://localhost:3002/users/${id}`, {
+      method: "DELETE",
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error(`Server error ${response.status}: ${text}`);
+        }
+        return response.json();
+      })
+      .then(() => {
+        setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
+      })
+      .catch((error) => console.error("Error deleting user:", error));
+  };
 
   return (
     <div>
       <h1>Шинэ хэрэглэгч нэмэх</h1>
-      
+
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -76,20 +73,17 @@ function App(){
         <button type="submit">Нэмэх</button>
       </form>
 
-
-      <h1>Хэрэглэгчидийн мэдээллийг харах</h1>
-<ul>
-  {users.map((user) => (
-    <li key={user.id}>
-      {user.name} ({user.email})
-      <button onClick={() => handleDelete(user.id)} style={{ marginLeft: "10px" }}>
-        Устгах
-      </button>
-    </li>
-  ))}
-</ul>
-      </div>
-    );
-  }
+      <h1>Хэрэглэгчдийн жагсаалт</h1>
+      <ul>
+        {users.map((user) => (
+          <li key={user.id}>
+            {user.name} ({user.email})
+            <button onClick={() => handleDelete(user.id)}>Устгах</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 export default App;
